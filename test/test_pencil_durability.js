@@ -16,17 +16,35 @@ get_file_text = function(file_name) {
     });
 }
 
-describe("Pencil Durability", function(){
-    it("should be able to write to a piece of paper", function(){
-        let path_to_file = path.resolve('files/blank_paper.txt');
-        let pencil = new Pencil(path_to_file, "a");
-        var text_written = pencil.written_text()
-        return get_file_text("blank_paper.txt")
-            .then((expected_text) => {
-                let result = text_written.trim();
-                let expected = expected_text.trim();
-                assert.equal(result, expected);
-            });
+clear_file = function(file_name) {
+    return new Promise(function (resolve, reject) {
+        fs.writeFile('./files/'+file_name, '', function(){
+            resolve('done');
+        })
+    }).catch((err) => {
+        reject(err);
     });
+}
+
+
+
+describe("Pencil Durability", function(){
+	
+	describe("Pencil writing", function(){	
+		beforeEach(function() {
+			return clear_file('blank_paper.txt');
+		});
+
+		it("should be able to write to a piece of paper", function(){
+			let path_to_file = path.resolve('files/blank_paper.txt');
+			let pencil = new Pencil()
+			pencil.write(path_to_file, "a");
+			return get_file_text("blank_paper.txt")
+				.then((result) => {
+					assert.equal(result.trim(), "a");
+				})
+		});
+
+	});
 
 });

@@ -1,0 +1,23 @@
+{
+  "name": "pencil_durability",
+  "version": "1.0.0",
+  "description": "tdd ",
+  "main": "pencil_durability.js",
+  "scripts": {
+    "test": "mocha || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/payneal/pencil_durability.git"
+  },
+  "author": "Ali Payne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/payneal/pencil_durability/issues"
+  },
+  "homepage": "https://github.com/payneal/pencil_durability#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  }
+}

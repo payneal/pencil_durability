@@ -27,12 +27,11 @@ clear_file = function(file_name) {
 }
 
 describe("Pencil Durability", function(){
-	
-	describe("Pencil writing", function(){	
-		beforeEach(function() {
-			return clear_file('blank_paper.txt');
-		});
+	beforeEach(function() {
+		return clear_file('blank_paper.txt');
+	});
 
+	describe("Pencil writing", function(){	
 		it("should be able to write to a piece of paper", function(){
             let pencil = new Pencil();
 			pencil.write( path.resolve('files/blank_paper.txt'), "a");
@@ -43,13 +42,15 @@ describe("Pencil Durability", function(){
 		});
 
         it("pencil should be able to append to paper", function(){
-            let pencil = new Pencil(); 
-            pencil.write(            
-                path.resolve('files/blank_paper.txt'),
-                "She sells sea shells");
-            pencil.write(            
-                path.resolve('files/blank_paper.txt'),
-                " down by the sea shore");
+            let pencil = new Pencil();
+            path_to_file = path.resolve('files/blank_paper.txt'),
+            Promise.resolve()
+                .then(() => { 
+                    pencil.write(path_to_file, "She sells sea shells")})
+                .then(() => {
+                    pencil.write(path_to_file, " down by the sea shore")
+                })
+            
             return get_file_text("blank_paper.txt")
                 .then((result) => {
                     assert.equal(
@@ -58,5 +59,17 @@ describe("Pencil Durability", function(){
                     )
                 })
         });
-	});
+    });
+
+    describe("Pencil point degradation", function(){
+        it("point durability of four writing 'text' should write 'text'", function(){
+            let pencil = new Pencil(4);
+            pencil.write(path.resolve('files/blank_paper.txt'), 'text');
+            return get_file_text("blank_paper.txt")
+                .then((result) => {
+                    assert.equal(result.trim(), 'text');
+                })
+         });
+    });
+
 });

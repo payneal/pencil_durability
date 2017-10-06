@@ -70,6 +70,14 @@ describe("Pencil Durability", function(){
                     assert.equal(result.trim(), 'text');
                 })
          });
+    
+        it("point durability of 4 writing 'Text' should write 'Tex '", function(){
+            let pencil = new Pencil(4);
+            pencil.write(path.resolve('files/blank_paper.txt'), "Text")
+            return get_file_text("blank_paper.txt")
+                .then((result) => {
+                    assert.equal(result.trim(), "Tex ");
+                })
+        });
     });
-
 });

@@ -34,7 +34,10 @@ describe("Pencil Durability", function(){
 	describe("Pencil writing", function(){	
 		it("should be able to write to a piece of paper", function(){
             let pencil = new Pencil();
-			pencil.write( path.resolve('files/blank_paper.txt'), "a");
+			Promise.resolve()
+				.then(() => {
+					pencil.write( path.resolve('files/blank_paper.txt'), "a");
+				});
 			return get_file_text("blank_paper.txt")
 				.then((result) => {
 					assert.equal(result.trim(), "a");
@@ -43,29 +46,29 @@ describe("Pencil Durability", function(){
 
         it("pencil should be able to append to paper", function(){
             let pencil = new Pencil();
-            path_to_file = path.resolve('files/blank_paper.txt'),
-            Promise.resolve()
-                .then(() => { 
-                    pencil.write(path_to_file, "She sells sea shells")})
-                .then(() => {
-                    pencil.write(path_to_file, " down by the sea shore")
-                })
-            
+        	path_to_file = path.resolve('files/blank_paper.txt'),
+			Promise.all([ 
+				pencil.write( path_to_file, "She sells sea shells"),
+				pencil.write( path_to_file, " down by the sea shore")])
+
             return get_file_text("blank_paper.txt")
                 .then((result) => {
                     assert.equal(
                         result.trim(),
                         "She sells sea shells down by the sea shore"
                     )
-                })
+               })
         });
     });
 
     describe("Pencil point degradation", function(){
         it("point durability of four writing 'text' should write 'text'", function(){
             let pencil = new Pencil(4);
-            pencil.write(path.resolve('files/blank_paper.txt'), 'text');
-            return get_file_text("blank_paper.txt")
+			Promise.resolve()
+				.then(() => { 
+            		pencil.write(path.resolve('files/blank_paper.txt'), 'text');
+            	});
+			return get_file_text("blank_paper.txt")
                 .then((result) => {
                     assert.equal(result.trim(), 'text');
                 })
@@ -73,10 +76,10 @@ describe("Pencil Durability", function(){
     
         it("point durability of 4 writing 'Text' should write 'Tex '", function(){
             let pencil = new Pencil(4);
-            pencil.write(path.resolve('files/blank_paper.txt'), "Text")
+            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "Text"));
             return get_file_text("blank_paper.txt")
                 .then((result) => {
-                    assert.equal(result.trim(), "Tex ");
+                    assert.equal(result.trim(), "Tex");
                 })
         });
     });

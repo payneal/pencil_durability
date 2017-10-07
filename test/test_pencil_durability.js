@@ -83,4 +83,18 @@ describe("Pencil Durability", function(){
                 })
         });
     });
+
+    describe("Pencile Sharpen", function(){
+        it("if pencil is sharpened, it regains its initial point durability", function(){
+            let  pencil = new Pencil(4);
+            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "Text"));
+            pencil.sharpen();
+            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "t Me"));
+            return get_file_text("blank_paper.txt")
+                .then((result) => {
+                    assert.equal(result.trim(), "Text Me");
+                })
+        });
+    });
+
 });

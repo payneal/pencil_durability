@@ -84,7 +84,7 @@ describe("Pencil Durability", function(){
         });
     });
 
-    describe("Pencile Sharpen", function(){
+    describe("Pencil Sharpen", function(){
         it("if pencil is sharpened, it regains its initial point durability", function(){
             let  pencil = new Pencil(4);
             Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "Text"));
@@ -105,6 +105,24 @@ describe("Pencil Durability", function(){
                 .then((result) => {
                     assert.equal(result.trim(), "Tex");
                 })    
+        });
+    });
+
+    describe("Pencil Erase", function(){
+        it("pencil can erase last occurrence of certain text on the paper", function(){
+            let pencil = new Pencil();
+            Promise.resolve(
+                pencil.write(
+                    path.resolve('files/blank_paper.txt'),
+                    "How much wood would a woodchuck chuck if a woodchuck could chuck wood?"));
+            Promise.resolve(pencil.erase('chuck'));
+            return get_file_text("blank_paper.txt")
+                .then((result) => { assert.equal(
+                     result.trim(), 
+                    "How much wood would a woodchuck chuck if a woodchuck could       wood?");
+                })  
+
+
         });
     });
 

@@ -95,6 +95,17 @@ describe("Pencil Durability", function(){
                     assert.equal(result.trim(), "Text Me");
                 })
         });
+
+        it("pencil should have length value. More lengths => more sharpens till 0.", function(){
+            let  pencil = new Pencil(4, 0);
+            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "Text"));
+            pencil.sharpen();
+            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "t Me"));
+            return get_file_text("blank_paper.txt")
+                .then((result) => {
+                    assert.equal(result.trim(), "Tex");
+                })    
+        });
     });
 
 });

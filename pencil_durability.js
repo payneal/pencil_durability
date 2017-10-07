@@ -17,31 +17,37 @@ function Pencil(durability=100) {
     function write_to_file(self){
         return new Promise(function (resolve, reject) {
             for (var i = 0; i < self.text.length; i++) {
-				if (self.text[i] === self.text[i].toUpperCase() &&
-					 	self.text[i] !== self.text[i].toLowerCase()) { 
-					// its upper case
-					if (self.durability - 2 >= 0) { 
-						fs.appendFileSync(self.file_location, self.text[i]);
-						self.durability -= 2;
- 					} else { 
-						fs.appendFileSync(self.file_location, " ");
-					}
-				} else {
-					// its lower case
-					if (self.durability - 1 >= 0) {
-						fs.appendFileSync(self.file_location, self.text[i])
-						self.durability -= 1;
-					} else {
-						fs.appendFileSync(self.file_location, " ");
-					}	 					
-            	}
-			}        
-			
-			resolve();
-        
+                insert_char_to_file(self, i);
+            }        	
+			resolve();  
 		}).catch((err) => {
 			throw err;
 		});
+    }
+
+    function insert_char_to_file(self, char_idx) { 
+        if (check_if_letter_captial(self, char_idx)) {
+            make_durability_change(self, 2, char_idx);
+        } else {
+            make_durability_change(self, 1, char_idx);
+        } 
+    }
+
+    function check_if_letter_captial(self, char_idx) {
+        if (self.text[char_idx] === self.text[char_idx].toUpperCase() &&
+                self.text[char_idx] !== self.text[char_idx].toLowerCase()) { 
+            return true;
+        }
+        return false;
+    }
+
+    function make_durability_change(self, amount, char_idx) {
+        if (self.durability - amount >= 0) { 
+            fs.appendFileSync(self.file_location, self.text[char_idx]);
+            self.durability -= amount;
+        } else { 
+            fs.appendFileSync(self.file_location, " ");
+        }
     }
 
     // public functions

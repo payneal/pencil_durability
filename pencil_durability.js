@@ -1,11 +1,12 @@
 var fs = require('fs')
-function Pencil(durability=100) {
+function Pencil(durability=100, length=100) {
     // private vars
     var self = this
 
     //public vars
     this.durability = durability;
     this.original_durability = durability;
+    this.length = length;
     this.file_location = null;
     this.text = ""
 
@@ -56,7 +57,10 @@ function Pencil(durability=100) {
     }
 
     this.sharpen = function() {
-        this.durability = this.original_durability;
+        if (this.length > 0) { 
+            this.durability = this.original_durability;
+            length -= 1;
+        }
     }
 }
 

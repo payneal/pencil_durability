@@ -5,6 +5,7 @@ function Pencil(durability=100) {
 
     //public vars
     this.durability = durability;
+    this.original_durability = durability;
     this.file_location = null;
     this.text = ""
 
@@ -42,19 +43,21 @@ function Pencil(durability=100) {
     }
 
     function make_durability_change(self, amount, char_idx) {
-        if (self.durability - amount >= 0) { 
+        if (self.durability - amount >= 0) {
             fs.appendFileSync(self.file_location, self.text[char_idx]);
-            self.durability -= amount;
-        } else { 
-            fs.appendFileSync(self.file_location, " ");
-        }
+            if (self.text[char_idx] !== ' ') self.durability -= amount
+        }  
     }
 
     // public functions
     this.write = function(file_location, text_to_write) {
         set_location_and_text(self, file_location, text_to_write);
 		write_to_file(self);
-	}
+    }
+
+    this.sharpen = function() {
+        this.durability = this.original_durability;
+    }
 }
 
 module.exports = Pencil

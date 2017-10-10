@@ -83,26 +83,40 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
     }
 
     function find_word(self, array_of_chars, i, word_looking_for) {
-        location = []
+        var location = []
         for (var index = 0; index < word_looking_for.length; index++) {
-			if ( i - index < 0 ||  array_of_chars[i - index] !== word_looking_for[index]) {
+            if (check_for_find_word(self, array_of_chars, i, index, word_looking_for)) {
+                location.push(i - index);
+            }
+            else { 
                 return false;
-			} else {
-				location.push(i - index);
-			}	
+            }
         }
         return location.reverse();
     }
 
+    function check_for_find_word(self, array_of_chars, i, index, word_looking_for) { 
+        if ( i - index < 0 ||  array_of_chars[i - index] !== word_looking_for[index]) {
+            return false;
+        } else {
+            return true;
+        }	
+    }
+
     function erase_found_word(self, location, array_of_chars) { 
         for(var i =0; i < location.length; i++) {
-            if (self.eraser_durability > 0) {
-                array_of_chars[location[i]] = " ";
-                self.eraser_durability -= 1;
-            }
-		}
+            array_of_chars = erase_check_durability(self, array_of_chars, i, location);	
+        }
 		rewrite_to_paper(self, array_of_chars.reverse().toString().replace(/\,/g, ""));
 	}
+
+    function erase_check_durability(self, array_of_chars, index, location) { 
+        if (self.eraser_durability > 0) {
+            array_of_chars[location[index]] = " ";
+            self.eraser_durability -= 1;
+        }
+        return array_of_chars;
+    }
 
    	function rewrite_to_paper(self, array_of_chars) { 	
 		return new Promise(function (resolve, reject) { 

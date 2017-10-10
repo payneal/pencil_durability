@@ -34,11 +34,9 @@ describe("Pencil Durability", function(){
 	describe("Pencil writing", function(){	
 		it("should be able to write to a piece of paper", function(){
             let pencil = new Pencil();
-			Promise.resolve()
-				.then(() => {
-					pencil.write( path.resolve('files/blank_paper.txt'), "a");
-				});
-			return get_file_text("blank_paper.txt")
+			return Promise.resolve()
+				.then(() => pencil.write( path.resolve('files/blank_paper.txt'), "a"))
+				.then(() => get_file_text("blank_paper.txt"))
 				.then((result) => {
 					assert.equal(result.trim(), "a");
 				})
@@ -46,14 +44,13 @@ describe("Pencil Durability", function(){
 
         it("pencil should be able to append to paper", function(){
             let pencil = new Pencil();
-        	path_to_file = path.resolve('files/blank_paper.txt'),
-			Promise.all([ 
-				pencil.write( path_to_file, "She sells sea shells"),
-				pencil.write( path_to_file, " down by the sea shore")])
-
-            return get_file_text("blank_paper.txt")
-                .then((result) => {
-                    assert.equal(
+        	path_to_file = path.resolve('files/blank_paper.txt')
+			return Promise.resolve()
+				.then(() => pencil.write( path_to_file, "She sells sea shells"))
+				.then(() => pencil.write( path_to_file, " down by the sea shore"))
+            	.then(() => get_file_text("blank_paper.txt"))
+            	.then((result) => {
+             		assert.equal(
                         result.trim(),
                         "She sells sea shells down by the sea shore"
                     )
@@ -64,11 +61,9 @@ describe("Pencil Durability", function(){
     describe("Pencil point degradation", function(){
         it("point durability of four writing 'text' should write 'text'", function(){
             let pencil = new Pencil(4);
-			Promise.resolve()
-				.then(() => { 
-            		pencil.write(path.resolve('files/blank_paper.txt'), 'text');
-            	});
-			return get_file_text("blank_paper.txt")
+            return Promise.resolve()
+			.then(() => pencil.write(path.resolve('files/blank_paper.txt'), 'text'))
+			.then(() => get_file_text("blank_paper.txt"))
                 .then((result) => {
                     assert.equal(result.trim(), 'text');
                 })
@@ -76,7 +71,7 @@ describe("Pencil Durability", function(){
     
         it("point durability of 4 writing 'Text' should write 'Tex '", function(){
             let pencil = new Pencil(4);
-            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "Text"));
+            pencil.write(path.resolve('files/blank_paper.txt'), "Text");
             return get_file_text("blank_paper.txt")
                 .then((result) => {
                     assert.equal(result.trim(), "Tex");
@@ -87,43 +82,42 @@ describe("Pencil Durability", function(){
     describe("Pencil Sharpen", function(){
         it("if pencil is sharpened, it regains its initial point durability", function(){
             let  pencil = new Pencil(4);
-            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "Text"));
-            pencil.sharpen();
-            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "t Me"));
-            return get_file_text("blank_paper.txt")
-                .then((result) => {
-                    assert.equal(result.trim(), "Text Me");
-                })
+            return Promise.resolve()
+				.then(() => pencil.write(path.resolve('files/blank_paper.txt'), "Text"))
+				.then(() => pencil.sharpen())
+            	.then(() => pencil.write(path.resolve('files/blank_paper.txt'), "t Me"))
+           		.then(() => get_file_text("blank_paper.txt"))
+            	.then((result) => {
+            		assert.equal(result.trim(), "Text Me");
+            	})
         });
 
         it("pencil should have length value. More lengths => more sharpens till 0.", function(){
             let  pencil = new Pencil(4, 0);
-            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "Text"));
-            pencil.sharpen();
-            Promise.resolve(pencil.write(path.resolve('files/blank_paper.txt'), "t Me"));
-            return get_file_text("blank_paper.txt")
-                .then((result) => {
-                    assert.equal(result.trim(), "Tex");
-                })    
-        });
-    });
+            return Promise.resolve()
+				.then(() => pencil.write(path.resolve('files/blank_paper.txt'), "Text"))
+            	.then(() => pencil.sharpen())
+            	.then(() => pencil.write(path.resolve('files/blank_paper.txt'), "t Me"))
+            	.then(() => get_file_text("blank_paper.txt"))
+            	.then( result => {
+            		assert.equal(result.trim(), "Tex");
+           		});
+    	});
+	});
 
     describe("Pencil Erase", function(){
         it("pencil can erase last occurrence of certain text on the paper", function(){
             let pencil = new Pencil();
-            Promise.resolve(
-                pencil.write(
-                    path.resolve('files/blank_paper.txt'),
-                    "How much wood would a woodchuck chuck if a woodchuck could chuck wood?"));
-            Promise.resolve(pencil.erase('chuck'));
-            return get_file_text("blank_paper.txt")
-                .then((result) => { assert.equal(
-                     result.trim(), 
-                    "How much wood would a woodchuck chuck if a woodchuck could       wood?");
-                })  
-
-
-        });
-    });
-
+			return Promise.resolve()
+				.then(() => pencil.write( path.resolve('files/blank_paper.txt'),
+  	        		"How much wood would a woodchuck chuck if a woodchuck could chuck wood?"))
+				.then(() => pencil.erase('chuck'))
+				.then(() => get_file_text("blank_paper.txt"))
+            	.then((result) => {
+					assert.equal(
+               			result, 
+                    	"How much wood would a woodchuck chuck if a woodchuck could       wood?");
+                })
+    	});
+	});
 });

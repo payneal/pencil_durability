@@ -60,7 +60,7 @@ describe("Pencil Durability", function(){
 
     describe("Pencil point degradation", function(){
         it("point durability of four writing 'text' should write 'text'", function(){
-            let pencil = new Pencil(4);
+            let pencil = new Pencil(durability=4);
             return Promise.resolve()
 			.then(() => pencil.write(path.resolve('files/blank_paper.txt'), 'text'))
 			.then(() => get_file_text("blank_paper.txt"))
@@ -70,7 +70,7 @@ describe("Pencil Durability", function(){
          });
     
         it("point durability of 4 writing 'Text' should write 'Tex '", function(){
-            let pencil = new Pencil(4);
+            let pencil = new Pencil(durability=4);
             pencil.write(path.resolve('files/blank_paper.txt'), "Text");
             return get_file_text("blank_paper.txt")
                 .then((result) => {
@@ -81,7 +81,7 @@ describe("Pencil Durability", function(){
 
     describe("Pencil Sharpen", function(){
         it("if pencil is sharpened, it regains its initial point durability", function(){
-            let  pencil = new Pencil(4);
+            let  pencil = new Pencil(durability=4);
             return Promise.resolve()
 				.then(() => pencil.write(path.resolve('files/blank_paper.txt'), "Text"))
 				.then(() => pencil.sharpen())
@@ -93,7 +93,7 @@ describe("Pencil Durability", function(){
         });
 
         it("pencil should have length value. More lengths => more sharpens till 0.", function(){
-            let  pencil = new Pencil(4, 0);
+            let  pencil = new Pencil(durability=4, length=0);
             return Promise.resolve()
 				.then(() => pencil.write(path.resolve('files/blank_paper.txt'), "Text"))
             	.then(() => pencil.sharpen())
@@ -134,6 +134,16 @@ describe("Pencil Durability", function(){
                     	"How much wood would a woodchuck chuck if a wood      could       wood?");
                 })
         });
+    });
 
-	});
+    describe("Pencil erase degeneration", function(){
+        it("pencil is created, it can be provided with a value for eraser durability", function(){
+            let pencil = new Pencil(eraser_durability=3);
+            return Promise.resolve()
+                .then(() => pencil.write( path.resolve('files/blank_paper.txt'), "Buffalo Bill"))
+                .then(() => pencil.erase('Bill'))
+                .then(() => get_file_text("blank_paper.txt"))
+                .then((result) => assert.equal(result,"Buffalo B   "))
+        });
+    });
 });

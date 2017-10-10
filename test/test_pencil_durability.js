@@ -161,11 +161,31 @@ describe("Pencil Durability", function(){
                     "Buffalo Bill"))
                 .then(() => pencil.erase('Bill'))
                 .then(() => get_file_text("blank_paper.txt"))
-                then((result) => {
+                .then((result) => {
                     assert.equal(result,"Buffalo B   ");
                 }).catch( err => {
                     throw err;
                 });
         });
     });
+
+
+    describe("Pencil editing", function(){
+        it("edit text with word of same length", function() {
+            let pencil = new Pencil(durability=100, length=100, eraser_durability=10);
+            return Promise.resolve()
+                .then(() => pencil.write( path.resolve('files/blank_paper.txt'),
+                    "An apple a day keeps the doctor away"))
+                .then(() => pencil.erase('apple'))
+                .then(() => pencil.edit('onion'))
+                .then(() => get_file_text("blank_paper.txt"))
+                .then((result) => {
+                    assert.equal(result, "An onion a day keeps the doctor away");
+                }).catch( err => {
+                    throw err;
+                });
+                
+        });
+    });
+
 });

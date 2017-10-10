@@ -118,6 +118,22 @@ describe("Pencil Durability", function(){
                			result, 
                     	"How much wood would a woodchuck chuck if a woodchuck could       wood?");
                 })
-    	});
+        });
+
+        it("pencli double erase", function(){
+            let pencil = new Pencil();
+            return Promise.resolve()
+                .then(() => pencil.write( path.resolve('files/blank_paper.txt'),
+  	        		"How much wood would a woodchuck chuck if a woodchuck could chuck wood?"))
+				.then(() => pencil.erase('chuck'))
+                .then(() => pencil.erase('chuck'))
+                .then(() => get_file_text("blank_paper.txt"))
+            	.then((result) => {
+					assert.equal(
+               			result, 
+                    	"How much wood would a woodchuck chuck if a wood      could       wood?");
+                })
+        });
+
 	});
 });

@@ -1,11 +1,12 @@
 var fs = require('fs')
-function Pencil(durability=100, length=100) {
+function Pencil(durability=100, length=100, eraser_durability=100) {
     // private vars
     var self = this;
 
     //public vars
     this.durability = durability;
     this.original_durability = durability;
+    this.eraser_durability = eraser_durability;
     this.length = length;
     this.file_location = null;
     this.text = "";
@@ -78,6 +79,7 @@ function Pencil(durability=100, length=100) {
                 if (location) return [location, array_of_chars];
             }
         }
+        return [null, null];
     }
 
     function find_word(self, array_of_chars, i, word_looking_for) {
@@ -89,12 +91,15 @@ function Pencil(durability=100, length=100) {
 				location.push(i - index);
 			}	
         }
-        return location;
+        return location.reverse();
     }
 
-	function erase_found_word(self, location, array_of_chars) {   
-		for(var i =0; i < location.length; i++) {
-			array_of_chars[location[i]] = " ";
+    function erase_found_word(self, location, array_of_chars) { 
+        for(var i =0; i < location.length; i++) {
+            if (self.eraser_durability > 0) {
+                array_of_chars[location[i]] = " ";
+                self.eraser_durability -= 1;
+            }
 		}
 		rewrite_to_paper(self, array_of_chars.reverse().toString().replace(/\,/g, ""));
 	}

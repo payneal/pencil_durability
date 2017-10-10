@@ -39,7 +39,9 @@ describe("Pencil Durability", function(){
 				.then(() => get_file_text("blank_paper.txt"))
 				.then((result) => {
 					assert.equal(result.trim(), "a");
-				})
+                }).catch( err => {
+                    throw err;
+                });
 		});
 
         it("pencil should be able to append to paper", function(){
@@ -54,7 +56,9 @@ describe("Pencil Durability", function(){
                         result.trim(),
                         "She sells sea shells down by the sea shore"
                     )
-               })
+                }).catch( err => {
+                    throw err;
+                });
         });
     });
 
@@ -66,16 +70,21 @@ describe("Pencil Durability", function(){
 			.then(() => get_file_text("blank_paper.txt"))
                 .then((result) => {
                     assert.equal(result.trim(), 'text');
-                })
+                }).catch( err => {
+                    throw err;
+                });
          });
     
         it("point durability of 4 writing 'Text' should write 'Tex '", function(){
             let pencil = new Pencil(durability=4);
-            pencil.write(path.resolve('files/blank_paper.txt'), "Text");
-            return get_file_text("blank_paper.txt")
+            return Promise.resolve()
+                .then(() =>  pencil.write(path.resolve('files/blank_paper.txt'), "Text"))
+                .then(() => get_file_text("blank_paper.txt"))
                 .then((result) => {
                     assert.equal(result.trim(), "Tex");
-                })
+                }).catch( err => {
+                    throw err;
+                });
         });
     });
 
@@ -89,7 +98,9 @@ describe("Pencil Durability", function(){
            		.then(() => get_file_text("blank_paper.txt"))
             	.then((result) => {
             		assert.equal(result.trim(), "Text Me");
-            	})
+                }).catch( err => {
+                    throw err;
+                });
         });
 
         it("pencil should have length value. More lengths => more sharpens till 0.", function(){
@@ -101,7 +112,9 @@ describe("Pencil Durability", function(){
             	.then(() => get_file_text("blank_paper.txt"))
             	.then( result => {
             		assert.equal(result.trim(), "Tex");
-           		});
+                }).catch( err => {
+                    throw err;
+                });
     	});
 	});
 
@@ -117,7 +130,9 @@ describe("Pencil Durability", function(){
 					assert.equal(
                			result, 
                     	"How much wood would a woodchuck chuck if a woodchuck could       wood?");
-                })
+                }).catch( err => {
+                    throw err;
+                });
         });
 
         it("pencli double erase", function(){
@@ -132,18 +147,25 @@ describe("Pencil Durability", function(){
 					assert.equal(
                			result, 
                     	"How much wood would a woodchuck chuck if a wood      could       wood?");
-                })
+                }).catch( err => {
+                    throw err;
+                }); 
         });
     });
 
     describe("Pencil erase degeneration", function(){
         it("pencil is created, it can be provided with a value for eraser durability", function(){
-            let pencil = new Pencil(eraser_durability=3);
+            let pencil = new Pencil(durability=100, length=100, eraser_durability=3);
             return Promise.resolve()
-                .then(() => pencil.write( path.resolve('files/blank_paper.txt'), "Buffalo Bill"))
+                .then(() => pencil.write( path.resolve('files/blank_paper.txt'),
+                    "Buffalo Bill"))
                 .then(() => pencil.erase('Bill'))
                 .then(() => get_file_text("blank_paper.txt"))
-                .then((result) => assert.equal(result,"Buffalo B   "))
+                then((result) => {
+                    assert.equal(result,"Buffalo B   ");
+                }).catch( err => {
+                    throw err;
+                });
         });
     });
 });

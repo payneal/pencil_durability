@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 // test
 const assert = require('chai').assert;
+const expect = require('chai').expect;
 const Pencil = require('../pencil_durability');
 const fs = require('fs')
 var path = require("path");
 
 get_file_text = function(file_name) {
     return new Promise(function (resolve, reject) {
-        fs.readFile('./files/' + file_name, 'utf8', 
-                function (err,data) {
-            if (err) {
-                reject(console.log(err));
-            }
+        fs.readFile('./files/' + file_name, 'utf8', function (err,data) {
+            if (err) reject(console.log(err));
             resolve(data);
         });
     });
@@ -20,7 +18,7 @@ get_file_text = function(file_name) {
 clear_file = function(file_name) {
     return new Promise(function (resolve, reject) {
         fs.writeFile('./files/'+file_name, '', function(){
-            resolve('done');
+            resolve();
         })
     }).catch((err) => {
         reject(err);
@@ -170,7 +168,6 @@ describe("Pencil Durability", function(){
         });
     });
 
-
     describe("Pencil editing", function(){
         it("edit text with word of same length", function() {
             let pencil = new Pencil(durability=100, length=100, eraser_durability=10);
@@ -199,9 +196,21 @@ describe("Pencil Durability", function(){
                     assert.equal(result, "An artich@k@ay keeps the doctor away");
                 }).catch( err => {
                     throw err;
-                });
-            
+                });            
         });
+
+        it("should throw exception if one tries to edit when nothings been erased", function(){
+            let pencil = new Pencil(durability=100, length=100, eraser_durability=10);
+            return Promise.resolve()
+                .then(() => pencil.write(path.resolve('files/blank_paper.txt'),
+                    "An apple a day keeps the doctor away"))
+                .then(() => {
+                    expect(() => pencil.edit("artichoke")).to.throw("must erase before you can edit");     
+                }).catch( err => {
+                    throw err;
+                });            
+        });
+
     });
 
 });

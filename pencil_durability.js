@@ -10,6 +10,7 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
     this.length = length;
     this.file_location = null;
     this.text = "";
+    this.editable = false;
 
     // public functions
     this.write = function(file_location, text_to_write) {
@@ -25,17 +26,29 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
     }
 
     this.erase = function(word_to_erase) {
-		return Promise.resolve()
+        return Promise.resolve()
 		    .then(() => all_filetext_to_array_of_chars(self))
             .then(array_of_chars => 
                 find_string_in_text(self, array_of_chars, word_to_erase))
-            .then(([result, array_of_chars]) => { 
-                if (result) erase_found_word(self, result, array_of_chars);
+            .then(([result, array_of_chars]) => {
+                if (result) {
+                    this.editable = result;
+                    erase_found_word(self, result, array_of_chars);
+                }    
             })       
             .catch(err => {
                 throw err;
 		    });
 	}
+
+    this.edit = function(word_to_add) {
+        return Promise.resolve()
+            .then(() => all_filetext_to_array_of_chars(self))
+            .then( array_of_chars => edit_erase_text(self, array_of_chars, word_to_add))
+            .catch( err => {
+                throw err;
+            });
+    }
 
     //private functions
     function set_location_and_text(self, file_location, text_to_write) {
@@ -137,6 +150,17 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
 				resolve(data.toString().split("").reverse());
 			}) 
 		});	
+    }
+
+    function edit_erase_text(self, array_of_chars, word_to_add) {
+        self.editable.reverse();
+
+        for(var i=0; i< word_to_add.length; i++) {
+            array_of_chars[ self.editable[i]] = word_to_add[i];
+        }
+        
+        rewrite_to_paper(self, array_of_chars.reverse().toString().replace(/\,/g, ""))
+        
     }
 }
 

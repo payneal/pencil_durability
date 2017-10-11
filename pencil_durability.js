@@ -10,7 +10,7 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
     this.length = length;
     this.file_location = null;
     this.text = "";
-    this.editable = false;
+    this.edit_location = [];
 
     // public functions
     this.write = function(file_location, text_to_write) {
@@ -28,13 +28,9 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
     this.erase = function(word_to_erase) {
         return Promise.resolve()
 		    .then(() => all_filetext_to_array_of_chars(self))
-            .then(array_of_chars => 
-                find_string_in_text(self, array_of_chars, word_to_erase))
+            .then(array_of_chars => find_string_in_text(self, array_of_chars, word_to_erase))
             .then(([result, array_of_chars]) => {
-                if (result) {
-                    this.editable = result;
-                    erase_found_word(self, result, array_of_chars);
-                }    
+                if (result) erase_found_word(self, result, array_of_chars);
             })       
             .catch(err => {
                 throw err;
@@ -118,17 +114,20 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
 
     function erase_found_word(self, location, array_of_chars) { 
         for(var i =0; i < location.length; i++) {
-            array_of_chars = erase_check_durability(self, array_of_chars, i, location);	
+            if (eraser_durability_check(self, array_of_chars, i, location)) {
+                array_of_chars[location[i]] = " ";
+                self.edit_location.push(location[i]);
+            }
         }
 		rewrite_to_paper(self, array_of_chars.reverse().toString().replace(/\,/g, ""));
-	}
+    }
 
-    function erase_check_durability(self, array_of_chars, index, location) { 
+    function eraser_durability_check(self, array_of_chars, index, location) { 
         if (self.eraser_durability > 0) {
-            array_of_chars[location[index]] = " ";
             self.eraser_durability -= 1;
+            return true;
         }
-        return array_of_chars;
+        return false;
     }
 
    	function rewrite_to_paper(self, array_of_chars) { 	
@@ -153,14 +152,12 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
     }
 
     function edit_erase_text(self, array_of_chars, word_to_add) {
-        self.editable.reverse();
-
+        self.edit_location.reverse();
         for(var i=0; i< word_to_add.length; i++) {
-            array_of_chars[ self.editable[i]] = word_to_add[i];
+            array_of_chars[ self.edit_location[i]] = word_to_add[i];
         }
-        
         rewrite_to_paper(self, array_of_chars.reverse().toString().replace(/\,/g, ""))
-        
+        self.edit_location = []; 
     }
 }
 

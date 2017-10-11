@@ -38,12 +38,14 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
 	}
 
     this.edit = function(word_to_add) {
-        return Promise.resolve()
-            .then(() => all_filetext_to_array_of_chars(self))
-            .then( array_of_chars => edit_erase_text(self, array_of_chars, word_to_add))
-            .catch( err => {
-                throw err;
-            });
+        if (self.edit_location !== []) { 
+            return Promise.resolve()
+                .then(() => all_filetext_to_array_of_chars(self))
+                .then( array_of_chars => edit_erase_text(self, array_of_chars, word_to_add))
+                .catch( err => {
+                    throw err;
+                });
+        }
     }
 
     //private functions
@@ -153,11 +155,22 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
 
     function edit_erase_text(self, array_of_chars, word_to_add) {
         self.edit_location.reverse();
+        var last_char = self.edit_location[self.edit_location.length-1];
+        
         for(var i=0; i< word_to_add.length; i++) {
-            array_of_chars[ self.edit_location[i]] = word_to_add[i];
+            if (self.edit_location[i] == null) {
+                last_char -=  1;
+                if (array_of_chars[last_char] !== " ") {
+                    array_of_chars[last_char] = '@'; 
+                } else { 
+                    array_of_chars[last_char] = word_to_add[i]; 
+                }    
+            } else {
+                array_of_chars[self.edit_location[i]] = word_to_add[i];
+            }
         }
-        rewrite_to_paper(self, array_of_chars.reverse().toString().replace(/\,/g, ""))
         self.edit_location = []; 
+        rewrite_to_paper(self, array_of_chars.reverse().toString().replace(/\,/g, ""))
     }
 }
 

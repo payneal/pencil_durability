@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var fs = require('fs')
 function Pencil(durability=100, length=100, eraser_durability=100) {
     // private vars

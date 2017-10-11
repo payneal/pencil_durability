@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // test
 const assert = require('chai').assert;
 const Pencil = require('../pencil_durability');

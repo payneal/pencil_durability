@@ -34,9 +34,13 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
 	}
 
     this.edit = function(word_to_add) {
-		return convert_filetext_to_array(self)
-			.then( array_of_chars => edit_erase_text(self, array_of_chars, word_to_add))
-			.catch( err => {throw err});
+        if(this.edit_location.length === 0){
+            throw Error ("must erase before you can edit");  
+        } else {
+            return convert_filetext_to_array(self)
+			    .then( array_of_chars => edit_erase_text(self, array_of_chars, word_to_add))
+			    .catch( err => {throw err});
+        }    
     }
 
     //private functions

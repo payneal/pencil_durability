@@ -205,7 +205,7 @@ describe("Pencil Durability", function(){
                 .then(() => pencil.write(path.resolve('files/blank_paper.txt'),
                     "An apple a day keeps the doctor away"))
                 .then(() => {
-                    expect(() => pencil.edit("artichoke")).to.throw("must erase before you can edit");     
+                    expect(() => pencil.edit("artichoke")).to.throw(Error, "must erase before you can edit");     
                 }).catch( err => {
                     throw err;
                 });            

@@ -12,6 +12,46 @@
 * npm install
 * npm run test
 
+## how program works 
+* to create pencil ex.
+```javascript
+    let pencil = new Pencil(durability= , length= ,eraser_durability);
+
+```
+
+* to write with created pencil ex.
+```javascript
+    
+    pencil.write( './file/path', 'text being written');
+
+```
+
+
+ * to sharpen pencil
+```javascript
+    
+    pencil.sharpen(); 
+
+```
+
+
+* to erase with pencil
+```javascript
+
+    pencil.erase('text to erase');
+    
+```
+
+
+ * to edit text written with pencil
+```javascript
+    
+    //only works after erase is called first
+    pencil.edit('replaced text')
+
+```
+
+# Background
 The purpose of the Pencil Kata is to write code to simulate, first coarsely and then more faithfully, an ordinary graphite pencil. It includes writing and editing text, point degradation, using the eraser, and sharpening the pencil. The point of this kata is to provide a larger than trivial exercise that can be used to practice TDD. A significant portion of the effort will be in determining what tests should be written and, more importantly, written next.
 
 ## Write

@@ -15,7 +15,7 @@
 ## how program works 
 * to create pencil ex.
 ```javascript
-    let pencil = new Pencil(durability= , length= ,eraser_durability);
+    let pencil = new Pencil(durability=100, length=100, eraser_durability=100);
 
 ```
 

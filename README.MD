@@ -1,4 +1,17 @@
 # Pencil Durability Kata
+
+## node -v
+* v8.6.0
+
+## npm -v
+* 5.4.2
+
+##  to run test
+* git clone repo 
+* cd pencil_durability
+* npm install
+* npm run test
+
 The purpose of the Pencil Kata is to write code to simulate, first coarsely and then more faithfully, an ordinary graphite pencil. It includes writing and editing text, point degradation, using the eraser, and sharpening the pencil. The point of this kata is to provide a larger than trivial exercise that can be used to practice TDD. A significant portion of the effort will be in determining what tests should be written and, more importantly, written next.
 
 ## Write

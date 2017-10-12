@@ -37,14 +37,18 @@ function Pencil(durability=100, length=100, eraser_durability=100) {
         if(this.edit_location.length === 0){
             throw Error ("must erase before you can edit");  
         } else {
-            return convert_filetext_to_array(self)
-			    .then( array_of_chars => edit_erase_text(self, array_of_chars, word_to_add))
-			    .catch( err => {throw err});
+            return  execute_edit(self, word_to_add);
         }    
     }
 
     //private functions
-	function erase_text_if_it_exist(self, result, array_of_chars) {
+    function execute_edit(self, word_to_add) { 
+        return convert_filetext_to_array(self)
+            .then( array_of_chars => edit_erase_text(self, array_of_chars, word_to_add))
+            .catch( err => {throw err});
+    }
+    
+    function erase_text_if_it_exist(self, result, array_of_chars) {
 		if (result) erase_found_word(self, result, array_of_chars);
 	}
 	
